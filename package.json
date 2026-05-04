@@ -1,0 +1,20 @@
+{
+  "name": "cashcore",
+  "version": "1.0.0",
+  "description": "CashCore — Friegter Wallet App",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/kill-ports.js",
+    "dev": "concurrently --names \"UI,API\" --prefix-colors \"cyan,magenta\" --kill-others-on-fail \"npm run dev --prefix cashcore-ui\" \"cargo run --manifest-path cashcore-api/Cargo.toml\"",
+    "ui": "npm run dev --prefix cashcore-ui",
+    "api": "cargo run --manifest-path cashcore-api/Cargo.toml",
+    "test:contract": "cargo test --manifest-path cashcore-contract/Cargo.toml",
+    "install:ui": "npm install --prefix cashcore-ui"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^15.1.0"
+  }
+}

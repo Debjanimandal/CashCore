@@ -1,0 +1,41 @@
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.pad-sm { padding: var(--space-3) var(--space-4); }
+.pad-md { padding: var(--space-5) var(--space-5); }
+.pad-lg { padding: var(--space-6) var(--space-6); }
+
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.glow {
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+  border-color: rgba(0, 212, 200, 0.12);
+}
+
+.adminGlow {
+  box-shadow: var(--shadow-card), var(--shadow-admin-glow);
+  border-color: rgba(124, 92, 252, 0.15);
+}
+
+.clickable {
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.clickable:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-card);
+}
+
+.clickable:active { transform: scale(0.99); }

@@ -1,0 +1,44 @@
+# ── Secrets & Keys ────────────────────────────────────────────
+cashcore-api/.env
+cashcore-ui/.env.local
+cashcore-ui/.env*.local
+scripts/deployer-keypair.json
+scripts/deployment-info.json
+*.pem
+*.key
+
+# ── Node ──────────────────────────────────────────────────────
+node_modules/
+cashcore-ui/node_modules/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── Next.js build ─────────────────────────────────────────────
+cashcore-ui/.next/
+cashcore-ui/out/
+cashcore-ui/.turbo/
+
+# ── Rust / Cargo build ────────────────────────────────────────
+cashcore-api/target/
+cashcore-contract/target/
+
+# ── OS & Editor ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Other markdown files (keep only README.md) ────────────────
+docs/
+*.md
+!README.md
+
+# ── Misc ──────────────────────────────────────────────────────
+.turbo/
+dist/
+build/

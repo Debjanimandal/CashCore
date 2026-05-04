@@ -1,0 +1,148 @@
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-12) var(--space-5) var(--space-10);
+  position: relative;
+  overflow: hidden;
+}
+
+.bgGlow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,212,200,0.07) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+  animation: slideDown 0.5s ease-out;
+  z-index: 1;
+}
+
+.logoIcon {
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 0 20px rgba(0,212,200,0.35));
+}
+
+.wordmark {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #fff 0%, var(--accent-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+/* Role Tabs */
+.roleTabs {
+  display: flex;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  margin-bottom: var(--space-6);
+  z-index: 1;
+  animation: fadeIn 0.4s 0.1s ease-out both;
+}
+
+.roleTab {
+  padding: var(--space-2) var(--space-8);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  min-width: 100px;
+}
+
+.roleTabActive {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  box-shadow: 0 2px 12px rgba(0,212,200,0.3);
+}
+
+.roleTabActiveAdmin {
+  background: var(--accent-secondary);
+  color: white;
+  box-shadow: 0 2px 12px rgba(124,92,252,0.3);
+}
+
+/* Form Card */
+.formCard {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  animation: slideUp 0.5s 0.2s ease-out both;
+  z-index: 1;
+}
+
+.form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.errorMsg {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+  background: var(--color-danger-dim);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-2);
+}
+
+.link {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+.link:hover { color: var(--accent-primary); }
+
+/* OTP */
+.otpSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.otpIcon { font-size: 40px; }
+.otpTitle { font-size: var(--text-xl); font-weight: 700; }
+.otpDesc { font-size: var(--text-sm); color: var(--text-secondary); }
+
+.backLink {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  padding: var(--space-2);
+  transition: color var(--transition-fast);
+}
+.backLink:hover { color: var(--text-primary); }
