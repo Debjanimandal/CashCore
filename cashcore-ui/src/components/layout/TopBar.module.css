@@ -6,14 +6,13 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: linear-gradient(to bottom, var(--bg-base) 60%, transparent);
+  background: var(--bg-base);
 }
 
-/* Desktop: wider padding, no need to show avatar (sidebar has user info) */
 @media (min-width: 769px) {
   .bar {
-    padding: var(--space-6) 0 var(--space-4);
-    background: linear-gradient(to bottom, var(--bg-base) 70%, transparent);
+    padding: var(--space-8) 0 var(--space-6);
+    background: transparent; /* Assuming main layout background handles it */
   }
 }
 
@@ -27,47 +26,23 @@
   flex-shrink: 0;
 }
 
-/* Hide avatar on desktop (sidebar shows user info) */
+/* Show avatar on desktop top bar now, per mockup */
 @media (min-width: 769px) {
   .avatarWrap {
-    display: none;
+    display: none; /* Wait, in the mockup, the avatar is on the RIGHT side, not left */
   }
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--text-sm);
-  font-weight: 700;
-  color: var(--text-inverse);
-  border: 2px solid rgba(255,255,255,0.1);
-}
-
-.greeting {
-  font-size: var(--text-xs);
-  color: var(--text-tertiary);
-  margin-bottom: 1px;
-}
-
-.userName {
-  font-size: var(--text-md);
+.greetingText {
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-/* On desktop, larger page title */
 @media (min-width: 769px) {
-  .userName {
-    font-size: var(--text-2xl);
-    letter-spacing: -0.02em;
-  }
-  .greeting {
-    font-size: var(--text-sm);
+  .greetingText {
+    font-size: var(--text-3xl);
   }
 }
 
@@ -86,24 +61,49 @@
 .right {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .notifBtn {
-  width: 36px;
-  height: 36px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--text-secondary);
   transition: all var(--transition-base);
+  position: relative;
 }
 
 .notifBtn:hover {
   color: var(--text-primary);
-  border-color: var(--border-default);
+}
+
+.notifBadge {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-danger);
+  border-radius: 50%;
+  border: 2px solid var(--bg-base);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-inverse);
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: url('https://ui-avatars.com/api/?name=Alex+R&background=0D8ABC&color=fff&size=100') center/cover;
 }
