@@ -179,16 +179,17 @@ export default function RegisterPage() {
                 {...register('email')}
               />
 
-              <Button
-                type="button"
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={handleNext}
-                id="register-next"
-              >
-                Continue →
-              </Button>
+              <div style={{ display: 'flex' }}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="lg"
+                  onClick={handleNext}
+                  id="register-next"
+                >
+                  Continue →
+                </Button>
+              </div>
             </div>
           )}
 
@@ -301,7 +302,6 @@ export default function RegisterPage() {
                   type="submit"
                   variant="primary"
                   size="lg"
-                  fullWidth
                   loading={loading}
                   id="register-submit"
                 >

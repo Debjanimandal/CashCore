@@ -107,9 +107,11 @@ export default function ProfilePage() {
         </Card>
 
         {/* Logout */}
-        <Button variant="danger" size="lg" fullWidth onClick={handleLogout} id="profile-logout">
-          Sign Out
-        </Button>
+        <div style={{ display: 'flex' }}>
+          <Button variant="danger" size="lg" onClick={handleLogout} id="profile-logout">
+            Sign Out
+          </Button>
+        </div>
       </main>
     </div>
   );

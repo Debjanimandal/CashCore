@@ -9,7 +9,30 @@
 }
 
 @media (min-width: 769px) {
-  .main { padding: 0 0 var(--space-8); max-width: 560px; }
+  .main {
+    padding: 0 32px 48px;
+    max-width: none;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    grid-template-rows: auto;
+    column-gap: 24px;
+    align-items: start;
+  }
+}
+
+/* Desktop: left column = QR card, right column = address + balance + actions */
+@media (min-width: 769px) {
+  /* Status row spans full width */
+  .statusRow { grid-column: 1 / -1; }
+  /* QR card stays in column 1, spanning multiple rows so the right side stacks next to it */
+  .qrCard { grid-column: 1; grid-row: 2 / span 4; }
+  
+  /* Address, balance, actions fill column 2 and stack up nicely */
+  .addressCard { grid-column: 2; grid-row: 2; }
+  .balanceCard { grid-column: 2; grid-row: 3; }
+  .actionRow { grid-column: 2; grid-row: 4; }
+  .connectBtn { grid-column: 2; grid-row: 5; }
 }
 
 
@@ -121,12 +144,17 @@
 .copyBtnDone { color: var(--color-success) !important; border-color: var(--color-success) !important; }
 
 /* Balance */
-.balanceCard { padding: var(--space-5) !important; }
+.balanceCard {
+  padding: var(--space-5) !important;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
 .balRow { display: flex; justify-content: space-between; align-items: flex-start; }
-.balLabel { font-size: var(--text-xs); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-2); }
-.balAmount { font-size: var(--text-3xl); font-weight: 700; font-family: var(--font-mono); letter-spacing: -0.02em; }
-.balAmount span { font-size: var(--text-lg); color: var(--accent-primary); }
-.balUsd { font-size: var(--text-xs); color: var(--text-tertiary); margin-top: var(--space-1); }
+.balLabel { font-size: var(--text-xs); color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-2); }
+.balAmount { font-size: var(--text-3xl); font-weight: 700; font-family: var(--font-mono); letter-spacing: -0.02em; color: #fff; }
+.balAmount span { font-size: var(--text-lg); color: rgba(255, 255, 255, 0.9); }
+.balUsd { font-size: var(--text-xs); color: rgba(255, 255, 255, 0.75); margin-top: var(--space-1); }
 
 .networkBadge {
   display: flex;

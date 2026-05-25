@@ -209,9 +209,11 @@ function SendPageInner() {
                     : 'Address must start with G'}
                 </p>
               )}
-              <Button variant="primary" size="lg" fullWidth disabled={!canStep2} onClick={() => setStep(2)} id="send-step2">
-                Continue →
-              </Button>
+              <div style={{ display: 'flex' }}>
+                <Button variant="primary" size="lg" disabled={!canStep2} onClick={() => setStep(2)} id="send-step2">
+                  Continue →
+                </Button>
+              </div>
             </Card>
           )}
 
@@ -246,7 +248,7 @@ function SendPageInner() {
               </div>
               <div className={styles.actionRow}>
                 <Button variant="secondary" size="lg" onClick={() => setStep(1)} id="send-back2">Back</Button>
-                <Button variant="primary" size="lg" fullWidth disabled={!canStep3} onClick={() => setStep(3)} id="send-step3">Review →</Button>
+                <Button variant="primary" size="lg" disabled={!canStep3} onClick={() => setStep(3)} id="send-step3">Review →</Button>
               </div>
             </Card>
           )}
@@ -289,7 +291,7 @@ function SendPageInner() {
               {error && <p className={styles.error}>{error}</p>}
               <div className={styles.actionRow}>
                 <Button variant="secondary" size="lg" onClick={() => setStep(2)} id="send-back3">Back</Button>
-                <Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleSend} id="send-confirm">
+                <Button variant="primary" size="lg" loading={loading} onClick={handleSend} id="send-confirm">
                   {loading ? 'Waiting for Freighter…' : 'Confirm & Send'}
                 </Button>
               </div>
@@ -313,16 +315,16 @@ function SendPageInner() {
                   rel="noopener noreferrer"
                   style={{ width: '100%' }}
                 >
-                  <Button variant="ghost" size="lg" fullWidth id="send-explorer">
+                  <Button variant="ghost" size="lg" id="send-explorer">
                     View on Explorer ↗
                   </Button>
                 </a>
                 <Badge variant="success" dot>Confirmed on Stellar Testnet</Badge>
-                <Button variant="ghost" size="lg" fullWidth onClick={reset} id="send-again">
+                <Button variant="ghost" size="lg" onClick={reset} id="send-again">
                   Send Another
                 </Button>
                 <a href="/activity">
-                  <Button variant="secondary" size="lg" fullWidth id="send-view-history">
+                  <Button variant="secondary" size="lg" id="send-view-history">
                     View History
                   </Button>
                 </a>

@@ -117,19 +117,18 @@ export default function WalletPage() {
           </div>
         </Card>
 
-        {/* Actions */}
         <div className={styles.actionRow}>
-          <Button variant="primary" size="lg" fullWidth leftIcon={<span>↑</span>} onClick={() => router.push('/send')} id="wallet-send">
+          <Button variant="primary" size="lg" leftIcon={<span>↑</span>} onClick={() => router.push('/send')} id="wallet-send">
             Send
           </Button>
-          <Button variant="ghost" size="lg" fullWidth leftIcon={<span>⊞</span>} onClick={() => setScannerOpen(true)} id="wallet-scan">
+          <Button variant="ghost" size="lg" leftIcon={<span>⊞</span>} onClick={() => setScannerOpen(true)} id="wallet-scan">
             Scan QR
           </Button>
         </div>
 
         {!wallet.connected && (
           <a href="/connect-wallet" className={styles.connectBtn}>
-            <Button variant="primary" size="lg" fullWidth>
+            <Button variant="primary" size="lg">
               Connect Friegter Wallet
             </Button>
           </a>

@@ -5,7 +5,7 @@
 /* Page wrapper */
 .page {
   min-height: 100dvh;
-  background: #F7F8FC;
+  background: transparent;
 }
 
 /* Main content area */
@@ -14,43 +14,52 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 900px;
+  width: 100%;
 }
 
 /* ---- Header / Greeting ---- */
 .pageHeader {
   padding: 32px 32px 0;
-  max-width: 900px;
+  width: 100%;
 }
 
 /* ---- Balance Card ---- */
 .balanceCard {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
   padding: 28px 32px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 12px 32px rgba(0, 194, 168, 0.25);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.balanceCard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='rgba(255,255,255,0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
 .balanceLeft { display: flex; flex-direction: column; gap: 6px; }
 
 .balanceLabel {
   font-size: 13px;
-  font-weight: 500;
-  color: #64748B;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .balanceAmount {
   font-size: 42px;
   font-weight: 700;
-  color: #0F172A;
+  color: #FFFFFF;
   letter-spacing: -0.03em;
   display: flex;
   align-items: baseline;
@@ -60,27 +69,28 @@
 
 .balanceToken {
   font-size: 22px;
-  font-weight: 500;
-  color: #475569;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .balanceUsd {
   font-size: 14px;
-  color: #94A3B8;
+  color: rgba(255, 255, 255, 0.75);
   margin-top: 2px;
 }
 
 /* Teal pill on right */
 .balancePill {
   align-self: center;
-  background: rgba(0, 178, 169, 0.1);
-  color: #00897B;
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
   padding: 6px 16px;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  border: 1px solid rgba(0, 178, 169, 0.2);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .connectPrompt {
@@ -89,7 +99,7 @@
   margin-top: 12px;
   padding: 8px 18px;
   background: #EFF6FF;
-  color: #2563EB;
+  color: var(--accent-primary);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
@@ -119,33 +129,35 @@
   align-items: center;
   gap: 7px;
   padding: 8px 18px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  background: #fff;
+  background: var(--bg-surface);
+  backdrop-filter: blur(8px);
   font-size: 13px;
-  font-weight: 500;
-  color: #334155;
+  font-weight: 600;
+  color: var(--text-primary);
   cursor: pointer;
   text-decoration: none;
-  transition: background 150ms, border-color 150ms, color 150ms;
+  transition: all 150ms;
   font-family: inherit;
   white-space: nowrap;
 }
 .quickBtn:hover {
-  background: #EFF6FF;
-  border-color: #93C5FD;
-  color: #1D4ED8;
+  background: var(--bg-hover);
+  border-color: var(--border-active);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
 }
 .quickBtn:active { transform: scale(0.98); }
 
 .quickBtnPrimary {
-  background: #2563EB;
-  border-color: #2563EB;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
   color: #fff;
 }
 .quickBtnPrimary:hover {
-  background: #1D4ED8;
-  border-color: #1D4ED8;
+  background: #00B099;
+  border-color: #00B099;
   color: #fff;
 }
 
@@ -156,24 +168,24 @@
   color: inherit;
 }
 
-/* ---- Transactions Table ---- */
 .txCard {
-  background: #fff;
-  border: 1px solid #E2E8F0;
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-card);
 }
 
 .txTableHead {
   display: grid;
   grid-template-columns: 90px 1fr 110px 130px;
   padding: 10px 20px;
-  background: #F8FAFC;
-  border-bottom: 1px solid #E2E8F0;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
   font-size: 12px;
   font-weight: 600;
-  color: #94A3B8;
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -184,17 +196,17 @@
   grid-template-columns: 90px 1fr 110px 130px;
   align-items: center;
   padding: 14px 20px;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid var(--border-subtle);
   text-decoration: none;
   transition: background 120ms;
 }
 .txRow:last-child { border-bottom: none; }
-.txRow:hover { background: #F8FAFC; }
+.txRow:hover { background: var(--bg-hover); }
 
 /* Date col */
 .txDate {
   font-size: 13px;
-  color: #64748B;
+  color: var(--text-secondary);
 }
 
 /* Entity col */
@@ -216,7 +228,7 @@
   font-weight: 600;
   color: #fff;
   flex-shrink: 0;
-  background: #2563EB;
+  background: var(--accent-primary);
 }
 
 .txDescWrap {
@@ -226,15 +238,15 @@
 }
 .txTitle {
   font-size: 13px;
-  font-weight: 500;
-  color: #0F172A;
+  font-weight: 600;
+  color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .txSub {
   font-size: 11px;
-  color: #94A3B8;
+  color: var(--text-tertiary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -265,9 +277,9 @@
   gap: 2px;
 }
 .txAmount { font-size: 14px; font-weight: 600; }
-.amountIn  { color: #16A34A; }
-.amountOut { color: #DC2626; }
-.txUsd     { font-size: 11px; color: #94A3B8; }
+.amountIn  { color: var(--color-success); }
+.amountOut { color: var(--color-danger); }
+.txUsd     { font-size: 11px; color: var(--text-tertiary); }
 
 /* Empty / Loading */
 .txEmpty {
@@ -277,12 +289,12 @@
   gap: 10px;
   padding: 40px 20px;
   font-size: 13px;
-  color: #94A3B8;
+  color: var(--text-tertiary);
 }
 .txSpinner {
   width: 16px; height: 16px;
   border: 2px solid #E2E8F0;
-  border-top-color: #2563EB;
+  border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;

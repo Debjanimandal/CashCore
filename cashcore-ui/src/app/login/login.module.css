@@ -216,7 +216,7 @@
   padding: 11px 20px;
   border-radius: 8px;
   border: none;
-  background: #2563EB;
+  background: var(--accent-primary);
   color: #fff;
   font-size: 15px;
   font-weight: 600;
@@ -229,7 +229,7 @@
   gap: 8px;
   margin-top: 4px;
 }
-.submitBtn:hover:not(:disabled) { background: #1D4ED8; }
+.submitBtn:hover:not(:disabled) { background: #00B099; }
 .submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 .submitBtn.adminBtn { background: #7C3AED; }
 .submitBtn.adminBtn:hover:not(:disabled) { background: #6D28D9; }
@@ -247,7 +247,7 @@
   transition: color 150ms;
   text-decoration: none;
 }
-.link:hover { color: #1D4ED8; text-decoration: underline; }
+.link:hover { color: #00B099; text-decoration: underline; }
 
 .divider {
   display: flex;

@@ -5,13 +5,13 @@
 :root {
   /* --- Color Palette (Light Theme Default) --- */
   --bg-base: #F8FAFC;
-  --bg-surface: #FFFFFF;
-  --bg-elevated: #F1F5F9;
-  --bg-hover: #E2E8F0;
+  --bg-surface: rgba(255, 255, 255, 0.75);
+  --bg-elevated: rgba(255, 255, 255, 0.5);
+  --bg-hover: rgba(255, 255, 255, 0.9);
 
-  --accent-primary: #00B2A9; /* Slightly darker teal for light background contrast */
-  --accent-primary-dim: rgba(0, 178, 169, 0.12);
-  --accent-primary-glow: rgba(0, 178, 169, 0.08);
+  --accent-primary: #00C2A8; /* Vibrant Teal from reference */
+  --accent-primary-dim: rgba(0, 194, 168, 0.12);
+  --accent-primary-glow: rgba(0, 194, 168, 0.24);
   --accent-secondary: #7C5CFC;
   --accent-secondary-dim: rgba(124, 92, 252, 0.12);
 
@@ -27,12 +27,12 @@
   --text-tertiary: #94A3B8;
   --text-inverse: #FFFFFF;
 
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-default: rgba(0, 0, 0, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.4);
+  --border-default: rgba(255, 255, 255, 0.6);
   --border-active: var(--accent-primary);
 
   /* --- Shadows --- */
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 8px 32px rgba(0, 194, 168, 0.04), 0 2px 12px rgba(0, 0, 0, 0.03);
   --shadow-glow: 0 0 24px rgba(0, 178, 169, 0.08);
   --shadow-glow-strong: 0 0 40px rgba(0, 178, 169, 0.14);
   --shadow-admin-glow: 0 0 24px rgba(124, 92, 252, 0.10);
