@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -18,8 +18,8 @@ function isMobile(): boolean {
 function getFreighterDeepLink(): string {
   const appUrl =
     typeof window !== 'undefined'
-      ? window.location.origin
-      : 'https://cash-core-git-main-debjanimandal556-gmailcoms-projects.vercel.app';
+      ? window.location.origin + '/connect-wallet'
+      : 'https://cash-core-git-main-debjanimandal556-gmailcoms-projects.vercel.app/connect-wallet';
   return `freighter://open?url=${encodeURIComponent(appUrl)}`;
 }
 
@@ -27,39 +27,31 @@ export default function ConnectWalletPage() {
   const router = useRouter();
   const { token, setWallet, user, setUser, addToast } = useCashCoreStore();
   const [loading, setLoading] = useState(false);
+  const [autoConnecting, setAutoConnecting] = useState(false);
   const [error, setError] = useState('');
   const [freighterInstalled, setFreighterInstalled] = useState<boolean | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [deepLinkAttempted, setDeepLinkAttempted] = useState(false);
+  const [freighterAvailableOnMobile, setFreighterAvailableOnMobile] = useState(false);
 
   useEffect(() => {
     setMobile(isMobile());
   }, []);
 
-  useEffect(() => {
-    if (mobile) return;
-    const checkFreighter = async () => {
-      try {
-        const { isConnected } = await import('@stellar/freighter-api');
-        const result = await isConnected();
-        setFreighterInstalled(result.isConnected || false);
-      } catch {
-        setFreighterInstalled(false);
-      }
-    };
-    checkFreighter();
-  }, [mobile]);
-
-  const handleConnect = async () => {
-    setLoading(true);
+  // ── Core connect logic (shared by both desktop and mobile auto-connect) ──
+  const doConnect = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
+    else setAutoConnecting(true);
     setError('');
+
     try {
       const { isConnected, requestAccess, getNetwork, getAddress } = await import('@stellar/freighter-api');
 
       const connected = await isConnected();
       if (!connected.isConnected) {
-        throw new Error('Freighter wallet not found. Please install the extension first.');
+        if (!silent) throw new Error('Freighter wallet not found. Please install the extension first.');
+        return false;
       }
 
       const accessResult = await requestAccess();
@@ -95,23 +87,111 @@ export default function ConnectWalletPage() {
       setWallet({ address: stellarAddress, connected: true, balance, network: 'Stellar Testnet' });
       if (user) setUser({ ...user, walletAddress: stellarAddress });
 
-      addToast(`Freighter connected! ${stellarAddress.slice(0, 8)}...`, 'success');
+      addToast(`Wallet connected! ${stellarAddress.slice(0, 8)}...`, 'success');
       router.push('/dashboard');
+      return true;
     } catch (e: any) {
       const msg = e.message || 'Could not connect wallet.';
-      setError(msg);
-      addToast(msg, 'error');
+      if (!silent) { setError(msg); addToast(msg, 'error'); }
+      return false;
     } finally {
       setLoading(false);
+      setAutoConnecting(false);
     }
-  };
+  }, [token, user, setWallet, setUser, addToast, router]);
+
+  // ── Desktop: check if extension is installed ──
+  useEffect(() => {
+    if (mobile) return;
+    const checkFreighter = async () => {
+      try {
+        const { isConnected } = await import('@stellar/freighter-api');
+        const result = await isConnected();
+        setFreighterInstalled(result.isConnected || false);
+      } catch {
+        setFreighterInstalled(false);
+      }
+    };
+    checkFreighter();
+  }, [mobile]);
+
+  // ── Mobile: check if Freighter is available (user is inside Freighter browser) ──
+  const checkMobileFreighter = useCallback(async () => {
+    try {
+      const { isConnected } = await import('@stellar/freighter-api');
+      const result = await isConnected();
+      if (result.isConnected) {
+        setFreighterAvailableOnMobile(true);
+        // Auto-connect silently
+        await doConnect(true);
+      }
+    } catch { /* not in Freighter browser */ }
+  }, [doConnect]);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    // Check immediately on load (user may already be in Freighter's browser)
+    checkMobileFreighter();
+
+    // Re-check when user comes back to this tab (e.g., after switching from Freighter app)
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        checkMobileFreighter();
+      }
+    };
+
+    // Also poll every 2s for 30s after deep link attempt in case app takes time
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [mobile, checkMobileFreighter]);
+
+  // ── Start polling after deep link is attempted ──
+  useEffect(() => {
+    if (!deepLinkAttempted || !mobile) return;
+
+    let attempts = 0;
+    const maxAttempts = 15; // 30 seconds
+    const interval = setInterval(async () => {
+      attempts++;
+      try {
+        const { isConnected } = await import('@stellar/freighter-api');
+        const result = await isConnected();
+        if (result.isConnected) {
+          clearInterval(interval);
+          setFreighterAvailableOnMobile(true);
+          await doConnect(true);
+        }
+      } catch { /* keep polling */ }
+      if (attempts >= maxAttempts) clearInterval(interval);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [deepLinkAttempted, mobile, doConnect]);
 
   const handleMobileOpen = () => {
     setDeepLinkAttempted(true);
     window.location.href = getFreighterDeepLink();
   };
 
-  // ─── MOBILE UI ─────────────────────────────────────────────────────────────
+  // ── AUTO-CONNECTING STATE (mobile, detected Freighter) ──────────────────
+  if (mobile && (autoConnecting || freighterAvailableOnMobile)) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.bgGlow} />
+        <div className={styles.content}>
+          <div className={styles.autoConnectWrap}>
+            <div className={styles.spinner} />
+            <h1 className={styles.title}>Connecting Wallet…</h1>
+            <p className={styles.desc}>Freighter detected! Connecting your Stellar wallet automatically.</p>
+            <Badge variant="testnet" dot>Stellar Testnet · No Real Funds</Badge>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── MOBILE UI ─────────────────────────────────────────────────────────────
   if (mobile) {
     return (
       <div className={styles.page}>
@@ -134,7 +214,7 @@ export default function ConnectWalletPage() {
 
           <h1 className={styles.title}>Connect on Mobile</h1>
           <p className={styles.desc}>
-            Open CashCore inside the <strong>Freighter mobile app</strong> to connect your Stellar wallet — no extension needed.
+            Open CashCore inside the <strong>Freighter mobile app</strong> — your wallet connects automatically.
           </p>
 
           <Badge variant="testnet" dot>Stellar Testnet · No Real Funds</Badge>
@@ -150,17 +230,31 @@ export default function ConnectWalletPage() {
             </div>
             <div className={styles.mobileStep}>
               <span className={styles.mobileStepNum}>3</span>
-              <span>Tap <strong>&quot;Connect Wallet&quot;</strong> and approve — done!</span>
+              <span>Your wallet connects <strong>automatically</strong> — no extra steps!</span>
             </div>
           </div>
 
-          <button className={styles.deepLinkBtn} onClick={handleMobileOpen} id="mobile-open-freighter">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-            Open in Freighter App
+          <button
+            className={styles.deepLinkBtn}
+            onClick={handleMobileOpen}
+            id="mobile-open-freighter"
+            disabled={deepLinkAttempted}
+          >
+            {deepLinkAttempted ? (
+              <>
+                <span className={styles.spinnerSmall} />
+                Waiting for Freighter…
+              </>
+            ) : (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                Open in Freighter App
+              </>
+            )}
           </button>
 
           {deepLinkAttempted && (
@@ -200,7 +294,7 @@ export default function ConnectWalletPage() {
               </button>
               {expanded && (
                 <div className={styles.faqContent}>
-                  <p>Download the free Freighter wallet:</p>
+                  <p>Download the free Freighter mobile wallet:</p>
                   <div className={styles.appStoreRow}>
                     <a
                       href="https://play.google.com/store/apps/details?id=org.stellar.freighterwallet"
@@ -232,7 +326,7 @@ export default function ConnectWalletPage() {
     );
   }
 
-  // ─── DESKTOP UI ────────────────────────────────────────────────────────────
+  // ── DESKTOP UI ─────────────────────────────────────────────────────────────
   return (
     <div className={styles.page}>
       <div className={styles.bgGlow} />
@@ -284,7 +378,7 @@ export default function ConnectWalletPage() {
           size="lg"
           fullWidth
           loading={loading}
-          onClick={handleConnect}
+          onClick={() => doConnect(false)}
           id="connect-wallet-btn"
           disabled={freighterInstalled === false}
         >
