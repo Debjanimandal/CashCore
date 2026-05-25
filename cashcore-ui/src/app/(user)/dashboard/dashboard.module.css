@@ -8,6 +8,21 @@
   animation: slideUp 0.4s ease-out;
 }
 
+/* Desktop layout */
+@media (min-width: 769px) {
+  .main {
+    padding: 0 0 var(--space-8);
+  }
+
+  /* Two-column layout for main content on large screens */
+  .desktopGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+}
+
 /* Balance Card */
 .balanceCard {
   background: linear-gradient(135deg, rgba(0,212,200,0.08) 0%, rgba(124,92,252,0.06) 100%) !important;

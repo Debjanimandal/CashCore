@@ -15,6 +15,13 @@
   padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
 }
 
+/* Hide bottom nav on desktop */
+@media (min-width: 769px) {
+  .nav {
+    display: none;
+  }
+}
+
 .tab {
   display: flex;
   flex-direction: column;

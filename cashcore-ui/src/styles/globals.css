@@ -171,7 +171,7 @@ code, pre, .mono {
 }
 
 /* ============================================
-   Page Container
+   Page Container — Mobile first (430px shell)
    ============================================ */
 .page-container {
   max-width: 430px;
@@ -183,7 +183,7 @@ code, pre, .mono {
 
 .page-content {
   padding: var(--space-6) var(--space-5);
-  padding-bottom: 96px; /* bottom nav */
+  padding-bottom: 96px; /* bottom nav space */
   animation: fadeIn var(--transition-slow) ease-out;
 }
 
@@ -235,4 +235,37 @@ code, pre, .mono {
   width: calc(100% - var(--space-8));
   max-width: 390px;
   pointer-events: none;
+}
+
+/* ============================================
+   DESKTOP RESPONSIVE (≥769px)
+   Sidebar navigation + wide content layout
+   ============================================ */
+@media (min-width: 769px) {
+  /* Full-width page shell — sidebar takes 240px on left */
+  .page-container {
+    max-width: 100%;
+    margin: 0;
+    margin-left: 240px;
+    min-height: 100dvh;
+    background: var(--bg-base);
+  }
+
+  .page-content {
+    padding: var(--space-8) var(--space-8);
+    padding-bottom: var(--space-8); /* no bottom nav on desktop */
+    max-width: 960px;
+    animation: fadeIn var(--transition-slow) ease-out;
+  }
+
+  /* Toast shifts right of sidebar */
+  .toast-container {
+    left: calc(240px + 50%);
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-content {
+    max-width: 1100px;
+  }
 }

@@ -8,6 +8,11 @@
   animation: slideUp 0.4s ease-out;
 }
 
+@media (min-width: 769px) {
+  .main { padding: 0 0 var(--space-8); max-width: 560px; }
+}
+
+
 .statusRow {
   display: flex;
   align-items: center;
