@@ -1,0 +1,271 @@
+/* ── Overlay ─────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal Sheet ─────────────────────────────────── */
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card, #0f1623);
+  border-radius: 24px 24px 0 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* ── Header ─────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scanIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(0, 212, 200, 0.12);
+  color: var(--accent-primary, #00D4C8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #F1F5F9);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748B);
+  margin: 2px 0 0;
+}
+
+.closeBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary, #94A3B8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.closeBtn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary, #F1F5F9);
+}
+
+/* ── Viewport Wrap ───────────────────────────────── */
+.viewportWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #000;
+  overflow: hidden;
+}
+
+.viewport {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Override html5-qrcode internal styles */
+.viewport > * {
+  border: none !important;
+}
+.viewport video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* ── Corner Frame ────────────────────────────────── */
+.frameCornerTL,
+.frameCornerTR,
+.frameCornerBL,
+.frameCornerBR {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-color: var(--accent-primary, #00D4C8);
+  border-style: solid;
+  border-width: 0;
+  z-index: 10;
+}
+
+.frameCornerTL {
+  top: calc(50% - 90px);
+  left: calc(50% - 90px);
+  border-top-width: 3px;
+  border-left-width: 3px;
+  border-radius: 6px 0 0 0;
+}
+.frameCornerTR {
+  top: calc(50% - 90px);
+  right: calc(50% - 90px);
+  border-top-width: 3px;
+  border-right-width: 3px;
+  border-radius: 0 6px 0 0;
+}
+.frameCornerBL {
+  bottom: calc(50% - 90px);
+  left: calc(50% - 90px);
+  border-bottom-width: 3px;
+  border-left-width: 3px;
+  border-radius: 0 0 0 6px;
+}
+.frameCornerBR {
+  bottom: calc(50% - 90px);
+  right: calc(50% - 90px);
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+  border-radius: 0 0 6px 0;
+}
+
+/* ── Scan Line ───────────────────────────────────── */
+.scanLine {
+  position: absolute;
+  left: calc(50% - 88px);
+  width: 176px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary, #00D4C8), transparent);
+  border-radius: 2px;
+  top: calc(50% - 88px);
+  animation: scan 2s ease-in-out infinite;
+  z-index: 11;
+  box-shadow: 0 0 8px var(--accent-primary, #00D4C8);
+}
+
+@keyframes scan {
+  0%, 100% { top: calc(50% - 88px); opacity: 0.6; }
+  50%       { top: calc(50% + 84px); opacity: 1; }
+}
+
+/* ── Success Overlay ─────────────────────────────── */
+.successOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 200, 83, 0.12);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  animation: fadeIn 0.2s ease;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-success, #00C853);
+  color: white;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.successText {
+  margin: 12px 0 0;
+  color: var(--color-success, #00C853);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ── Error Overlay ───────────────────────────────── */
+.errorOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.1);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  z-index: 20;
+}
+
+.errorIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-danger, #EF4444);
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorText {
+  color: #FCA5A5;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+}
+
+.retryBtn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.12);
+  color: #FCA5A5;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.retryBtn:hover { background: rgba(239, 68, 68, 0.2); }
+
+/* ── Hint ────────────────────────────────────────── */
+.hint {
+  padding: 16px 24px 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted, #64748B);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}

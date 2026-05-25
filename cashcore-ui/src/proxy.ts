@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-function parseTokenClaims(token: string | undefined): { role?: string; wallet?: string } | null {
+// Edge-runtime-safe base64url decoder (no Buffer)
+function base64UrlDecode(str: string): string {
+  const padded = str.replace(/-/g, '+').replace(/_/g, '/');
+  const rem = padded.length % 4;
+  const full = rem ? padded + '='.repeat(4 - rem) : padded;
+  return atob(full);
+}
+
+function parseToken(token: string | undefined): Record<string, any> | null {
   if (!token) return null;
   try {
-    const payload = token.split('.')[1];
-    if (!payload) return null;
-    return JSON.parse(Buffer.from(payload, 'base64').toString());
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(base64UrlDecode(parts[1]));
+    if (payload.exp && payload.exp * 1000 < Date.now()) return null;
+    return payload;
   } catch {
     return null;
   }
@@ -15,29 +25,31 @@ function parseTokenClaims(token: string | undefined): { role?: string; wallet?: 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get('cc_session')?.value;
-  const claims = parseTokenClaims(sessionCookie);
+  const claims = parseToken(sessionCookie);
 
-  // Admin routes — require admin role
+  const isAuthenticated = !!(claims?.sub);
+  const isAdmin = claims?.user_metadata?.role === 'admin';
+
+  // Admin routes
   if (pathname.startsWith('/admin')) {
-    if (!claims || claims.role !== 'admin') {
+    if (!isAdmin) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();
   }
 
-  // Protected user routes — require any auth
+  // Protected user routes
   const protectedPaths = ['/dashboard', '/wallet', '/activity', '/profile', '/send', '/connect-wallet'];
-  if (protectedPaths.some((p) => pathname.startsWith(p))) {
-    if (!claims) {
+  if (protectedPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    if (!isAuthenticated) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();
   }
 
-  // Redirect logged-in users away from login
-  if (pathname === '/login' && claims) {
-    const dest = claims.role === 'admin' ? '/admin/dashboard' : '/dashboard';
-    return NextResponse.redirect(new URL(dest, request.url));
+  // Redirect authenticated users away from login/register
+  if ((pathname === '/login' || pathname === '/register') && isAuthenticated) {
+    return NextResponse.redirect(new URL(isAdmin ? '/admin/dashboard' : '/dashboard', request.url));
   }
 
   return NextResponse.next();
@@ -46,13 +58,19 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/dashboard',
     '/dashboard/:path*',
+    '/wallet',
     '/wallet/:path*',
+    '/activity',
     '/activity/:path*',
+    '/profile',
     '/profile/:path*',
+    '/send',
     '/send/:path*',
-    '/connect-wallet/:path*',
     '/connect-wallet',
+    '/connect-wallet/:path*',
     '/login',
+    '/register',
   ],
 };

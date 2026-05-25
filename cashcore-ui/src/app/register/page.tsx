@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { supabase } from '@/lib/supabase';
 import { useCashCoreStore } from '@/store';
-import { authApi } from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Badge from '@/components/ui/Badge';
@@ -53,24 +53,44 @@ export default function RegisterPage() {
     setLoading(true);
     setApiError('');
     try {
-      const res = await authApi.register({
-        name: data.name,
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
-      }) as any;
-
-      setToken(res.token);
-      setUser({
-        id: res.user.id,
-        email: res.user.email,
-        displayName: res.user.display_name,
-        role: res.user.role,
-        status: res.user.status,
-        walletAddress: res.user.wallet_address ?? undefined,
-        createdAt: res.user.created_at ?? new Date().toISOString(),
+        options: {
+          data: {
+            display_name: data.name,
+            role: 'user',
+          },
+        },
       });
-      // Set session cookie for server-side middleware
-      document.cookie = `cc_session=${res.token}; path=/; max-age=86400; SameSite=Lax`;
+
+      if (authError) throw new Error(authError.message);
+      if (!authData.user) throw new Error('Registration failed. Please try again.');
+
+      const user = authData.user;
+      const session = authData.session;
+
+      // session can be null if email confirmation is ON — remind user
+      if (!session) {
+        addToast('Check your email to confirm your account, then log in.', 'success');
+        router.push('/login');
+        return;
+      }
+
+      // Set session cookie for middleware
+      document.cookie = `cc_session=${session.access_token}; path=/; max-age=86400; SameSite=Lax`;
+
+      setToken(session.access_token);
+      setUser({
+        id: user.id,
+        email: user.email ?? data.email,
+        displayName: data.name,
+        role: 'user',
+        status: 'active',
+        walletAddress: undefined,
+        createdAt: user.created_at,
+      });
+
       addToast('Account created! Welcome to CashCore.', 'success');
       router.push('/connect-wallet');
     } catch (e: any) {

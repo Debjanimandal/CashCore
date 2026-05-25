@@ -39,6 +39,7 @@
 }
 
 .qrLabel { font-size: var(--text-sm); color: var(--text-secondary); font-weight: 500; }
+.qrSub { font-size: var(--text-xs); color: var(--text-tertiary); margin-top: calc(var(--space-1) * -1); }
 
 .qrWrap {
   position: relative;
@@ -50,6 +51,18 @@
 
 .qrWrap:hover { transform: scale(1.02); }
 .qrWrap:active { transform: scale(0.98); }
+
+/* White padded container so QR is always readable in light & dark themes */
+.qrInner {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 
 .qrHint {
   position: absolute;

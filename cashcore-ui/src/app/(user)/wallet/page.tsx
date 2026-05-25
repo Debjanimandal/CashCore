@@ -1,18 +1,28 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import TopBar from '@/components/layout/TopBar';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
+import QrScannerModal from '@/components/ui/QrScannerModal';
 import { useCashCoreStore } from '@/store';
 import styles from './wallet.module.css';
 
 export default function WalletPage() {
   const wallet = useCashCoreStore((s) => s.wallet);
+  const router = useRouter();
   const [qrExpanded, setQrExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
+
+  // Deep-link URL encoded in the QR — scanners open /send?to=ADDRESS
+  const appUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+  const qrValue = wallet.address
+    ? `${appUrl}/send?to=${wallet.address}`
+    : 'cashcore://no-wallet';
 
   const displayAddress = wallet.address || '0xFRGT...Not connected';
 
@@ -42,6 +52,7 @@ export default function WalletPage() {
         {/* QR Code Card */}
         <Card glass glow className={styles.qrCard}>
           <p className={styles.qrLabel}>Your Wallet QR Code</p>
+          <p className={styles.qrSub}>Scan this to send XLM to my wallet</p>
           <div
             className={styles.qrWrap}
             onClick={() => setQrExpanded(true)}
@@ -50,13 +61,17 @@ export default function WalletPage() {
             aria-label="Tap to expand QR code"
             id="wallet-qr"
           >
-            <QRCodeSVG
-              value={wallet.address || 'friegter://no-wallet'}
-              size={180}
-              bgColor="transparent"
-              fgColor="#F1F5F9"
-              level="M"
-            />
+            {/* White padded container ensures QR is always visible in any theme */}
+            <div className={styles.qrInner}>
+              <QRCodeSVG
+                value={qrValue}
+                size={160}
+                bgColor="#FFFFFF"
+                fgColor="#0A0E1A"
+                level="H"
+                includeMargin={false}
+              />
+            </div>
             <div className={styles.qrHint}>Tap to expand</div>
           </div>
         </Card>
@@ -104,11 +119,11 @@ export default function WalletPage() {
 
         {/* Actions */}
         <div className={styles.actionRow}>
-          <Button variant="primary" size="lg" fullWidth leftIcon={<span>↑</span>}>
+          <Button variant="primary" size="lg" fullWidth leftIcon={<span>↑</span>} onClick={() => router.push('/send')} id="wallet-send">
             Send
           </Button>
-          <Button variant="ghost" size="lg" fullWidth leftIcon={<span>↓</span>}>
-            Receive
+          <Button variant="ghost" size="lg" fullWidth leftIcon={<span>⊞</span>} onClick={() => setScannerOpen(true)} id="wallet-scan">
+            Scan QR
           </Button>
         </div>
 
@@ -125,9 +140,9 @@ export default function WalletPage() {
       {qrExpanded && (
         <div className={styles.qrOverlay} onClick={() => setQrExpanded(false)} role="dialog" aria-modal="true">
           <div className={styles.qrFull}>
-            <p className={styles.qrFullLabel}>Scan to pay or identify</p>
+            <p className={styles.qrFullLabel}>Scan to send XLM to my wallet</p>
             <QRCodeSVG
-              value={wallet.address || 'friegter://no-wallet'}
+              value={qrValue}
               size={260}
               bgColor="white"
               fgColor="#0A0E1A"
@@ -139,6 +154,9 @@ export default function WalletPage() {
           </div>
         </div>
       )}
+
+      {/* QR Scanner Modal */}
+      {scannerOpen && <QrScannerModal onClose={() => setScannerOpen(false)} />}
     </div>
   );
 }

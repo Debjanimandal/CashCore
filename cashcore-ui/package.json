@@ -11,6 +11,8 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@stellar/freighter-api": "^6.0.1",
+    "@supabase/supabase-js": "^2.105.3",
+    "html5-qrcode": "^2.3.8",
     "next": "16.2.4",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
