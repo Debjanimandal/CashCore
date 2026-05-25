@@ -10,7 +10,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 260px; /* Slightly wider */
+    width: 220px;
     height: 100dvh;
     background: var(--bg-surface);
     border-right: 1px solid var(--border-subtle);

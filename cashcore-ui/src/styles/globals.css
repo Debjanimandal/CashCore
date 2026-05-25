@@ -242,25 +242,26 @@ code, pre, .mono {
    Sidebar navigation + wide content layout
    ============================================ */
 @media (min-width: 769px) {
-  /* Full-width page shell — sidebar takes 240px on left */
+  /* Full-width page shell — sidebar takes 220px on left */
   .page-container {
-    max-width: 100%;
+    width: calc(100% - 220px);
     margin: 0;
-    margin-left: 240px;
+    margin-left: 220px;
     min-height: 100dvh;
-    background: var(--bg-base);
+    background: #F7F8FC;
+    display: flex;
+    flex-direction: column;
   }
 
   .page-content {
-    padding: var(--space-8) var(--space-8);
-    padding-bottom: var(--space-8); /* no bottom nav on desktop */
+    padding: 0 var(--space-8) var(--space-8);
     max-width: 960px;
     animation: fadeIn var(--transition-slow) ease-out;
   }
 
   /* Toast shifts right of sidebar */
   .toast-container {
-    left: calc(240px + 50%);
+    left: calc(220px + 50%);
   }
 }
 
