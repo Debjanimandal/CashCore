@@ -74,7 +74,7 @@ function parseHorizonPayments(payments: any[], myAddress: string): Tx[] {
         status: 'confirmed' as const,
         timestamp: timeAgo(rawDate),
         rawDate,
-        direction: isReceived ? 'in' : 'out',
+        direction: (isReceived ? 'in' : 'out') as 'in' | 'out',
         group: getGroup(rawDate),
         ledger: p.paging_token,
         memo: p.transaction?.memo,
