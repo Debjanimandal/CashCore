@@ -66,18 +66,18 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { user, wallet } = useCashCoreStore();
 
-  const initials = user?.name
-    ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
+  const initials = user?.displayName
+    ? user.displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
     : 'U';
 
-  // Generate a consistent color from user name
+  // Generate a consistent color from user displayName
   const avatarColors = [
     'linear-gradient(135deg,#00D4C8,#0099A8)',
     'linear-gradient(135deg,#7C5CFC,#5B3FD4)',
     'linear-gradient(135deg,#F59E0B,#D97706)',
     'linear-gradient(135deg,#22C55E,#16A34A)',
   ];
-  const colorIndex = (user?.name?.charCodeAt(0) ?? 0) % avatarColors.length;
+  const colorIndex = (user?.displayName?.charCodeAt(0) ?? 0) % avatarColors.length;
 
   return (
     <aside className={styles.sidebar} aria-label="Sidebar navigation">
@@ -129,7 +129,7 @@ export default function Sidebar() {
             {initials}
           </div>
           <div className={styles.userInfo}>
-            <div className={styles.userName}>{user.name || 'User'}</div>
+            <div className={styles.userName}>{user.displayName || 'User'}</div>
             <div className={styles.userRole}>
               {wallet?.connected ? `${wallet.balance} XLM` : 'Wallet not connected'}
             </div>
