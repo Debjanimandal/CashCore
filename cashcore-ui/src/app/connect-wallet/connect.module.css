@@ -282,3 +282,97 @@
   to { transform: rotate(360deg); }
 }
 
+/* Freighter detected badge */
+.freighterDetectedBadge {
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.35);
+  color: #10b981;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* Timed out banner */
+.timedOutBanner {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  width: 100%;
+  font-size: var(--text-sm);
+}
+.timedOutBanner strong { display: block; color: var(--color-warning); margin-bottom: 4px; }
+.timedOutBanner p { color: var(--text-secondary); margin: 0; }
+
+/* URL box */
+.urlBox {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+.urlLabel {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin: 0 0 var(--space-2);
+}
+.urlRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.urlCode {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--accent-primary);
+  word-break: break-all;
+  flex: 1;
+}
+.copyBtn {
+  flex-shrink: 0;
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.copyBtn:hover { opacity: 0.85; }
+
+/* Waiting row */
+.waitingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+}
+.waitingText {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.cancelBtn {
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.cancelBtn:hover { color: var(--color-danger); border-color: var(--color-danger); }
+
+
