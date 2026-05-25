@@ -211,7 +211,7 @@ export default function RegisterPage() {
                       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                     </svg>
                   }
-                  rightIcon={
+                  rightElement={
                     <button type="button" onClick={() => setShowPass((v) => !v)} className={styles.eyeBtn} tabIndex={-1}>
                       {showPass ? (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -265,7 +265,7 @@ export default function RegisterPage() {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   }
-                  rightIcon={
+                  rightElement={
                     <button type="button" onClick={() => setShowConfirm((v) => !v)} className={styles.eyeBtn} tabIndex={-1}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
